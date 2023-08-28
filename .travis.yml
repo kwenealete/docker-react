@@ -6,4 +6,16 @@ before_install:
   - docker build -t alvete/docker-react -f Dockerfile.dev .
 
 script:
-  - docker run -e CI=true alvete/docker-react npm run test
+  - docker run alvete/docker-react npm run test --coverage
+
+  deploy:
+    provider: elasticbeanstalk
+    region: "eu-north-1"
+    app: "Docker-react"
+    env: "Docker-react-env"
+    bucket_name: "elasticbeanstalk-eu-north-1-493739114887"
+    bucket_path: "Docker-react"
+    on: 
+      branch: master
+    access_key_id: "$AWS_ACCESS_KEY"
+    secret_key_id: "$AWS_SECRET_KEY"
